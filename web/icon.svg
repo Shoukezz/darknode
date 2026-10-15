@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="DarkNode">
+  <rect width="512" height="512" rx="96" fill="#120d05"/>
+  <g fill="none" stroke="#ffb347" stroke-width="20" stroke-linecap="round" stroke-linejoin="round">
+    <!-- network glyph -->
+    <circle cx="128" cy="256" r="26" fill="#ffb347" stroke="none"/>
+    <circle cx="300" cy="150" r="22"/>
+    <circle cx="300" cy="362" r="22"/>
+    <circle cx="416" cy="256" r="26" fill="#ffb347" stroke="none"/>
+    <line x1="150" y1="244" x2="282" y2="162"/>
+    <line x1="150" y1="268" x2="282" y2="350"/>
+    <line x1="318" y1="160" x2="398" y2="242"/>
+    <line x1="318" y1="352" x2="398" y2="270"/>
+  </g>
+  <!-- prompt caret -->
+  <g stroke="#ffb347" stroke-width="18" stroke-linecap="round" fill="none">
+    <polyline points="150,420 186,444 150,468"/>
+    <line x1="210" y1="470" x2="300" y2="470"/>
+  </g>
+</svg>

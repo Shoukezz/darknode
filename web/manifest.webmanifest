@@ -1,0 +1,16 @@
+{
+  "name": "DarkNode",
+  "short_name": "DarkNode",
+  "description": "Learn Python from zero to advanced by writing scripts to breach a fictional retro network.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#120d05",
+  "theme_color": "#0b0f0a",
+  "categories": ["education", "games"],
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

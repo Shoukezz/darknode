@@ -3,59 +3,154 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#151a2c">
-  <meta name="description" content="DarkNode: a hacking-simulator game where you write Python scripts to breach a fictional network. Runs in your browser.">
+  <meta name="theme-color" content="#0b0f0a">
+  <meta name="description" content="DarkNode: learn Python from zero to advanced by writing scripts to breach a fictional retro network. Runs in your browser.">
   <title>DarkNode</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body data-skin="amber">
+  <div class="crt" id="crt">
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="flicker" id="flicker" aria-hidden="true"></div>
+
   <header class="top">
     <h1 class="logo">Dark<span>Node</span></h1>
-    <nav class="missions" id="missions" aria-label="Missions"></nav>
+    <p class="tagline" id="tagline"></p>
+    <div class="top-stats">
+      <span class="stat" id="credits-stat" title="credits">◈ 0</span>
+      <span class="stat" id="stars-stat" title="stars">★ 0/75</span>
+    </div>
+    <div class="top-actions">
+      <select id="lang-select" class="chip" aria-label="Language"></select>
+      <button class="chip" id="btn-acts" type="button">⌘ <span data-i18n="ui.acts">Acts</span></button>
+      <button class="chip" id="btn-shop" type="button">◈ <span data-i18n="ui.shop">Shop</span></button>
+      <button class="chip" id="btn-ach" type="button">🏆 <span data-i18n="ui.achievements">Achievements</span></button>
+      <button class="chip" id="btn-settings" type="button">⚙ <span data-i18n="ui.settings">Settings</span></button>
+    </div>
   </header>
 
   <main class="layout">
     <section class="intel" aria-labelledby="mission-title">
-      <h2 id="mission-title" class="mission-title">Loading…</h2>
-      <p id="briefing" class="briefing"></p>
+      <div class="intel-head">
+        <span class="badge" id="mission-tag"></span>
+        <h2 id="mission-title" class="mission-title">Loading…</h2>
+      </div>
 
-      <figure class="map">
+      <div class="panel briefing-panel">
+        <div class="mentor">
+          <svg class="avatar" viewBox="0 0 48 48" id="mentor-avatar" aria-hidden="true"></svg>
+          <span class="mentor-name" id="mentor-name">BYTE</span>
+        </div>
+        <p id="briefing" class="briefing"></p>
+      </div>
+
+      <details class="panel" id="concept-panel" open>
+        <summary data-i18n="ui.concept">Concept</summary>
+        <pre id="concept" class="concept"></pre>
+      </details>
+
+      <details class="panel" id="hint-panel">
+        <summary data-i18n="ui.hint">Hint</summary>
+        <div id="hints" class="hints"></div>
+      </details>
+
+      <figure class="map panel">
         <svg id="map" role="img" aria-label="Network map"></svg>
-        <figcaption id="map-caption">Run a script to map what you can see.</figcaption>
+        <figcaption id="map-caption" data-i18n="ui.map_caption_empty">Run a script to map what you can see.</figcaption>
       </figure>
 
-      <details class="api">
-        <summary>Script commands</summary>
+      <details class="panel api">
+        <summary data-i18n="ui.api_commands">Script commands</summary>
         <pre id="api-help"></pre>
       </details>
     </section>
 
     <section class="console" aria-label="Your script">
       <div class="editor-wrap">
-        <label for="editor" class="file-tab">mission.py</label>
+        <label for="editor" class="file-tab" id="file-tab">mission.py</label>
         <textarea id="editor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" wrap="off"></textarea>
       </div>
 
       <div class="actions">
-        <button id="run" class="run" disabled>Run script</button>
-        <button id="reset" class="ghost" type="button">Reset to template</button>
+        <button id="run" class="run" disabled data-i18n="ui.run">Run script</button>
+        <button id="reset" class="ghost" type="button" data-i18n="ui.reset">Reset to template</button>
         <span class="shortcut">Ctrl + Enter</span>
       </div>
 
       <div class="budget" aria-hidden="true"><div id="budget-bar"></div></div>
-      <pre id="output" class="output" aria-live="polite">Booting Python in your browser. First load takes a few seconds…</pre>
+      <pre id="output" class="output" aria-live="polite" data-i18n="ui.booting">Booting Python in your browser…</pre>
     </section>
   </main>
 
+  <!-- panels ------------------------------------------------------------- -->
+  <div class="overlay" id="overlay" hidden></div>
+
+  <aside class="drawer" id="acts-drawer" hidden aria-label="Acts">
+    <header class="drawer-head"><h3 data-i18n="ui.acts">Acts</h3><button class="x" data-close>✕</button></header>
+    <div id="acts-list" class="acts-list"></div>
+    <div class="sandbox-box">
+      <h4 data-i18n="ui.sandbox_mode">Free play</h4>
+      <p id="sandbox-note" class="muted" data-i18n="ui.sandbox_locked">Finish the campaign to unlock free play.</p>
+      <div class="sandbox-controls" id="sandbox-controls" hidden>
+        <label><span data-i18n="ui.sandbox_seed">Seed</span> <input type="number" id="sandbox-seed" value="1" min="1"></label>
+        <button class="ghost" id="sandbox-start" type="button" data-i18n="ui.sandbox_new">New network</button>
+      </div>
+    </div>
+  </aside>
+
+  <aside class="drawer" id="shop-drawer" hidden aria-label="Command shop">
+    <header class="drawer-head"><h3 data-i18n="ui.shop">Command shop</h3><button class="x" data-close>✕</button></header>
+    <p class="muted" id="shop-credits"></p>
+    <div id="shop-list" class="shop-list"></div>
+  </aside>
+
+  <aside class="drawer" id="ach-drawer" hidden aria-label="Achievements">
+    <header class="drawer-head"><h3 data-i18n="ui.achievements">Achievements</h3><button class="x" data-close>✕</button></header>
+    <div id="ach-list" class="ach-list"></div>
+  </aside>
+
+  <aside class="drawer" id="settings-drawer" hidden aria-label="Settings">
+    <header class="drawer-head"><h3 data-i18n="ui.settings">Settings</h3><button class="x" data-close>✕</button></header>
+    <div class="setting">
+      <label for="skin-select" data-i18n="ui.skin">Terminal skin</label>
+      <select id="skin-select"></select>
+    </div>
+    <div class="setting toggle"><label for="opt-crt" data-i18n="ui.crt">CRT glow</label><input type="checkbox" id="opt-crt" checked></div>
+    <div class="setting toggle"><label for="opt-scan" data-i18n="ui.scanlines">Scanlines</label><input type="checkbox" id="opt-scan" checked></div>
+    <div class="setting toggle"><label for="opt-flicker" data-i18n="ui.flicker">Boot flicker</label><input type="checkbox" id="opt-flicker" checked></div>
+    <div class="setting"><label for="opt-music" data-i18n="ui.music">Music</label><input type="range" id="opt-music" min="0" max="1" step="0.05" value="0.4"></div>
+    <div class="setting"><label for="opt-sfx" data-i18n="ui.sfx">Sound effects</label><input type="range" id="opt-sfx" min="0" max="1" step="0.05" value="0.6"></div>
+    <hr>
+    <div class="setting buttons">
+      <button class="ghost" id="btn-export" type="button" data-i18n="ui.export">Export save</button>
+      <button class="ghost" id="btn-import" type="button" data-i18n="ui.import">Import save</button>
+      <input type="file" id="import-file" accept="application/json,.json" hidden>
+    </div>
+    <div class="setting">
+      <button class="danger" id="btn-reset-progress" type="button" data-i18n="ui.reset_progress">Reset progress</button>
+    </div>
+    <p class="muted small" id="settings-msg"></p>
+  </aside>
+
   <footer class="foot">
-    Everything here is fictional. Your scripts run locally in your browser.
-    <a href="https://github.com/Shoukezz/darknode">Source on GitHub</a>
+    <span data-i18n="ui.footer">Everything here is fictional. Your scripts run locally in your browser.</span>
+    <a href="https://github.com/Shoukezz/darknode" data-i18n="ui.source">Source on GitHub</a>
   </footer>
+  </div><!-- /crt -->
+
+  <div class="toast" id="toast" hidden></div>
 
   <script src="https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+  <script src="audio.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
