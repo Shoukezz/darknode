@@ -114,12 +114,12 @@ class Terminal:
                 m = get_mission(mid)
                 rec = self.data.record(mid)
                 if mid not in open_ids:
-                    mark = "🔒"
+                    mark = "##"
                 elif rec and rec.stars:
-                    mark = "✓" + "★" * rec.stars
+                    mark = "*" * rec.stars
                 else:
-                    mark = " "
-                lines.append(f"  [{mark:<4}] {mid:>2}. {self.tr(f'mission.{mid}.title')}")
+                    mark = ".."
+                lines.append(f"  [{mark:<3}] {mid:>2}. {self.tr(f'mission.{mid}.title')}")
             lines.append("")
         return "\n".join(lines).rstrip()
 
@@ -222,13 +222,20 @@ class Terminal:
             if summary.get("bonus"):
                 lines.append("-- " + self.tr("ui.bonus", bonus=summary["bonus"]))
             for ach in summary.get("new_achievements", []):
-                lines.append("-- 🏆 " + self.tr(f"achievement.{ach}.name"))
+                lines.append("-- [+] " + self.tr(f"achievement.{ach}.name"))
         else:
             lines.append(self.tr("ui.failed", message=message))
         return "\n".join(line.rstrip("\n") for line in lines)
 
 
 def main() -> None:
+    # The game's text includes Ukrainian (and stars); make sure the console can
+    # print UTF-8 even on a legacy code page (e.g. Windows cp1252).
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     term = Terminal()
     print(BANNER)
     print(term.tr("ui.tagline"))

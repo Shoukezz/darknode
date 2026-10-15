@@ -309,7 +309,7 @@ class TerminalTests(unittest.TestCase):
             Path(tmp, "mission1.py").write_text(SOLUTIONS[1])
             out = term.handle("run 1")
             self.assertIn("ACCESS GRANTED", out)
-            self.assertIn("✓", term.handle("missions"))
+            self.assertIn("*", term.handle("missions"))  # stars marker on a cleared mission
 
     def test_language_switch(self):
         with tempfile.TemporaryDirectory() as tmp:

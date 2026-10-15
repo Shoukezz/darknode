@@ -43,8 +43,8 @@ darknode/
   game.py       # GameSession: the API player scripts call
   sandbox.py    # runs player code with limited builtins + a CPU-cycle budget
   missions.py   # mission mechanics: networks, checkers, budgets, concepts
-  content.py    # the campaign: acts, mission order, shop, achievements (data)
-  hints.py      # three-level hint lookup
+  content.py    # the campaign: acts, mission order, achievements (data)
+  shop.py       # buyable helper commands (three-level hints live in the locales)
   i18n.py       # translation loader + completeness helpers
   save.py       # progress, credits, achievements, best scores; export/import
   progress.py   # ties save + content together (credits, shop, unlocks)
@@ -119,6 +119,14 @@ Terminal stores it at `~/.darknode/save.json`; the browser mirrors the same stru
   The owner enables Pages once (Settings → Pages → Source: "GitHub Actions"); the workflow
   now tolerates the already-/not-yet-enabled states instead of hard-failing. Documented in
   README and SESSION_REPORT.
+- **2026-10-15 — Screenshots via a headless harness.** The build sandbox blocks all hosts
+  except package registries, so Pyodide/CodeMirror (CDN) can't load here and the live page
+  can't be driven directly. The front-end was instead verified and screenshotted in headless
+  Chromium by serving the real `web/index.html`, intercepting the CDN scripts, stubbing
+  `loadPyodide`, and feeding a mock bridge the **real** catalog/result JSON generated from the
+  Python engine. This exercises the actual shipped HTML/CSS/JS (rendering, unlock progression,
+  run flow, skins, live language switch, shop, achievements). The Python engine itself is
+  covered by the 41-test unit suite. Screenshots live in `docs/screenshots/`.
 - **2026-10-15 — Assets are code, not files.** No binary assets are fetched or committed:
   music/SFX are synthesized with Web Audio, avatars and icons are inline SVG, the CRT look
   is CSS. External scripts (CodeMirror, Pyodide) load only from cdn.jsdelivr.net /
