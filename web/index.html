@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#151a2c">
+  <meta name="description" content="DarkNode: a hacking-simulator game where you write Python scripts to breach a fictional network. Runs in your browser.">
+  <title>DarkNode</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <h1 class="logo">Dark<span>Node</span></h1>
+    <nav class="missions" id="missions" aria-label="Missions"></nav>
+  </header>
+
+  <main class="layout">
+    <section class="intel" aria-labelledby="mission-title">
+      <h2 id="mission-title" class="mission-title">Loading…</h2>
+      <p id="briefing" class="briefing"></p>
+
+      <figure class="map">
+        <svg id="map" role="img" aria-label="Network map"></svg>
+        <figcaption id="map-caption">Run a script to map what you can see.</figcaption>
+      </figure>
+
+      <details class="api">
+        <summary>Script commands</summary>
+        <pre id="api-help"></pre>
+      </details>
+    </section>
+
+    <section class="console" aria-label="Your script">
+      <div class="editor-wrap">
+        <label for="editor" class="file-tab">mission.py</label>
+        <textarea id="editor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" wrap="off"></textarea>
+      </div>
+
+      <div class="actions">
+        <button id="run" class="run" disabled>Run script</button>
+        <button id="reset" class="ghost" type="button">Reset to template</button>
+        <span class="shortcut">Ctrl + Enter</span>
+      </div>
+
+      <div class="budget" aria-hidden="true"><div id="budget-bar"></div></div>
+      <pre id="output" class="output" aria-live="polite">Booting Python in your browser. First load takes a few seconds…</pre>
+    </section>
+  </main>
+
+  <footer class="foot">
+    Everything here is fictional. Your scripts run locally in your browser.
+    <a href="https://github.com/Shoukezz/darknode">Source on GitHub</a>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

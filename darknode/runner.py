@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from .game import GameSession
 from .missions import Mission
@@ -14,6 +14,7 @@ class MissionResult:
     success: bool
     message: str
     run: RunResult
+    session: GameSession | None = field(default=None, repr=False)
 
 
 def play(mission: Mission, source: str, filename: str = "<script>") -> MissionResult:
@@ -21,6 +22,6 @@ def play(mission: Mission, source: str, filename: str = "<script>") -> MissionRe
     session = GameSession(mission.build())
     run = run_script(source, session.api(), mission.max_cycles, filename)
     if not run.ok:
-        return MissionResult(False, run.error or "script failed", run)
+        return MissionResult(False, run.error or "script failed", run, session)
     success, message = mission.check(session)
-    return MissionResult(success, message, run)
+    return MissionResult(success, message, run, session)

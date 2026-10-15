@@ -1,5 +1,9 @@
 # DarkNode
 
+[![Tests](https://github.com/Shoukezz/darknode/actions/workflows/tests.yml/badge.svg)](https://github.com/Shoukezz/darknode/actions/workflows/tests.yml)
+
+**[Play in your browser](https://shoukezz.github.io/darknode/)** on any device: phone, tablet or desktop. Nothing to install.
+
 A hacking-simulator game where you write **Python scripts** to breach a fictional network.
 
 You sit at a terminal on the host `home`. Each mission drops you into a made-up network of
@@ -17,9 +21,14 @@ darknode> run 1
 ACCESS GRANTED: network mapped: 10 hosts
 ```
 
-## Quick start
+## Play
 
-Requires Python 3.10+. No dependencies.
+**In the browser:** open [shoukezz.github.io/darknode](https://shoukezz.github.io/darknode/).
+The real Python engine runs inside the page through [Pyodide](https://pyodide.org), so your
+scripts behave exactly as they do in the terminal version. Your scripts and progress are
+saved in your browser.
+
+**In a terminal** (Windows, macOS, Linux). Requires Python 3.10+, no dependencies.
 
 ```bash
 git clone https://github.com/Shoukezz/darknode.git
@@ -76,6 +85,20 @@ darknode/
   missions.py  # mission networks, briefings and answer checks
   runner.py    # plays a script against a mission
   terminal.py  # the interactive shell
+web/
+  index.html   # browser version: editor, output and a live network map
+  app.js       # loads the engine into Pyodide and draws the map
+  bridge.py    # JSON bridge between the page and the engine
+```
+
+The browser and terminal versions share one engine. A GitHub Actions workflow copies
+`web/` and `darknode/` into a static site and publishes it to GitHub Pages on every push.
+
+To run the web version locally, serve the repository root and open `/web/`:
+
+```bash
+python -m http.server
+# then open http://localhost:8000/web/
 ```
 
 The sandbox compiles the player's script, runs it with a reduced set of builtins and an
@@ -91,15 +114,17 @@ the game rules but is not meant to contain hostile code.
 python -m unittest
 ```
 
+CI runs the suite on Windows, macOS and Linux with Python 3.10 and 3.13.
+
 The test suite includes a reference solution for every mission, which proves each one is
 solvable within its CPU budget.
 
 ## Roadmap
 
 - [x] Core engine, sandbox, 3 missions, terminal
+- [x] Browser version with a live network map, cross-platform CI
 - [ ] More missions: password dictionaries, XOR, shortest paths, firewalls
 - [ ] Save progress, credits and unlockable commands
-- [ ] Full-screen terminal UI
 
 ## License
 
