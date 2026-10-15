@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "darknode"
+version = "0.1.0"
+description = "A hacking-simulator game where you write Python scripts to breach a fictional network"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Krokha Maksym" }]
+
+[project.scripts]
+darknode = "darknode.terminal:main"
+
+[tool.setuptools]
+packages = ["darknode"]
