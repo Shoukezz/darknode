@@ -1,0 +1,562 @@
+{
+  "meta": {
+    "lang_name": "English"
+  },
+  "ui": {
+    "title": "DarkNode",
+    "tagline": "Write Python. Breach the network.",
+    "run": "Run script",
+    "running": "running mission.py…",
+    "reset": "Reset to template",
+    "reset_confirm": "Replace your script with the mission template?",
+    "ready": "Ready. Edit the script and press Run.",
+    "booting": "Booting Python in your browser. First load takes a few seconds…",
+    "boot_fail": "Python failed to load: {error}",
+    "boot_fail_hint": "Check your connection and reload the page.",
+    "mission_loaded": "Mission {id} loaded. CPU budget: {cycles} cycles.",
+    "cycles": "cycles used: {used} / {max}",
+    "granted": "ACCESS GRANTED: {message}",
+    "failed": "FAILED: {message}",
+    "stars": "stars: {stars}/3",
+    "bonus": "cycle bonus: +{bonus} credits",
+    "awarded": "reward: +{awarded} credits",
+    "credits": "Credits: {credits}",
+    "briefing": "Briefing",
+    "concept": "Concept",
+    "hint": "Hint",
+    "hint_more": "Need more?",
+    "hint_locked": "Solve a bit more, then come back for the next hint.",
+    "api_commands": "Script commands",
+    "map_caption_empty": "Run a script to map what you can see.",
+    "map_caption": "{seen} of {total} hosts discovered. Amber is where you are; red dashes are locked.",
+    "settings": "Settings",
+    "language": "Language",
+    "skin": "Terminal skin",
+    "crt": "CRT glow & curvature",
+    "scanlines": "Scanlines",
+    "flicker": "Boot flicker",
+    "music": "Music",
+    "sfx": "Sound effects",
+    "skin_amber": "Amber phosphor",
+    "skin_green": "Green phosphor",
+    "skin_ice": "Ice blue",
+    "skin_corp": "Corporate beige",
+    "shop": "Command shop",
+    "buy": "Buy",
+    "owned": "Owned",
+    "locked": "Locked",
+    "cost": "{cost} cr",
+    "too_poor": "Not enough credits (need {need} more).",
+    "achievements": "Achievements",
+    "best_cycles": "best: {cycles} cycles",
+    "not_done": "not solved yet",
+    "acts": "Acts",
+    "sandbox_mode": "Free play",
+    "sandbox_locked": "Finish the campaign to unlock free play.",
+    "sandbox_new": "New network",
+    "sandbox_seed": "Seed",
+    "export": "Export save",
+    "import": "Import save",
+    "import_ok": "Save imported.",
+    "import_fail": "That file is not a valid DarkNode save.",
+    "reset_progress": "Reset progress",
+    "reset_progress_confirm": "Erase all progress, credits and achievements?",
+    "mentor_name": "BYTE",
+    "offline_ready": "DarkNode is ready to play offline.",
+    "footer": "Everything here is fictional. Your scripts run locally in your browser.",
+    "source": "Source on GitHub"
+  },
+  "api_help": "Commands available inside your scripts:\n  whoami()              -> current host\n  scan(host=None)       -> list of linked hosts (default: current host)\n  links(host=None)      -> [(host, latency), ...] for routing\n  connect(host)         -> move to an unlocked host you have discovered\n  hint(host)            -> password hint of a locked host\n  crack(host, password) -> True if the password is right (unlocks the host)\n  ls()                  -> files on the current host\n  cat(filename)         -> contents of a file on the current host\n  size()                -> length of the mission dataset (search missions)\n  at(index)             -> one element of the dataset\n  submit(answer)        -> send your answer for the mission\nAllowed imports: math, string, itertools, collections, functools, heapq,\nbase64, re, bisect, textwrap, json, hashlib",
+  "act": {
+    "1": {
+      "name": "Act I — Orientation",
+      "blurb": "OmniGrid onboarding. Prove you can hold a keyboard."
+    },
+    "2": {
+      "name": "Act II — Loops & Collections",
+      "blurb": "The grind: repeat things, and keep track of them."
+    },
+    "3": {
+      "name": "Act III — Functions & Text",
+      "blurb": "Package your logic. Make sense of messy strings."
+    },
+    "4": {
+      "name": "Act IV — Algorithms",
+      "blurb": "Stop guessing. Search, sort and route like you mean it."
+    },
+    "5": {
+      "name": "Act V — Ciphers & Forensics",
+      "blurb": "Break the code. Read the logs. Own the mainframe."
+    }
+  },
+  "run": {
+    "error": "{error}"
+  },
+  "check": {
+    "empty": "You haven't called submit(...) yet.",
+    "alarm": "ALARM! Too many failed cracks — the gateway locked you out. Try again.",
+    "m1": {
+      "ok": "You're online. BYTE is unimpressed, as always.",
+      "no": "Expected the word ONLINE, got '{got}'."
+    },
+    "m2": {
+      "ok": "96 credits. The payroll bot weeps.",
+      "no": "That's {got}. The ledger disagrees.",
+      "nan": "Submit a number, not that."
+    },
+    "m3": {
+      "ok": "Badge forged: OMNI-0042. You look official now.",
+      "no": "Got '{got}'. The format is OMNI-0042."
+    },
+    "m4": {
+      "ok": "Clearance GRANTED. The door sighs open.",
+      "no": "Wrong call. Re-read the rule and the values."
+    },
+    "m5": {
+      "ok": "2550. Even numbers never stood a chance.",
+      "no": "Got {got}. Sum the EVEN numbers from 1 to 100."
+    },
+    "m6": {
+      "ok": "{n} open ports, sorted and submitted.",
+      "no": "That list of open ports isn't right.",
+      "type": "Submit a list of port numbers."
+    },
+    "m7": {
+      "ok": "Gateway cracked in {n} attempts. Quiet work.",
+      "no": "That's not the operator file.",
+      "alarm": "Alarm tripped — too noisy."
+    },
+    "m8": {
+      "ok": "Busiest user: alice. Suspiciously busy.",
+      "no": "Got '{got}'. Count events per user first."
+    },
+    "m9": {
+      "ok": "{n} hosts seen by BOTH sensors.",
+      "no": "That's not the overlap of the two sensors.",
+      "type": "Submit a list of hostnames."
+    },
+    "m10": {
+      "ok": "Five valid badges. Your function works.",
+      "no": "Got {got}. Re-check the checksum rule.",
+      "type": "Submit a count (an integer)."
+    },
+    "m11": {
+      "ok": "Name extracted: Ghost.",
+      "no": "Got '{got}'. Strip the spaces and read the NAME field."
+    },
+    "m12": {
+      "ok": "Un-reversed. The old server gives up its secret.",
+      "no": "Not quite. Reverse every character."
+    },
+    "m13": {
+      "ok": "Fibonacci(20) = 6765. Memoization saved your cycles.",
+      "no": "Got {got}. The 20th Fibonacci number is expected.",
+      "type": "Submit a number."
+    },
+    "m14": {
+      "ok": "Squares of the odds, sorted. Clean.",
+      "no": "That list isn't right.",
+      "type": "Submit a list of numbers."
+    },
+    "m15": {
+      "ok": "Targets ranked. BYTE pretends not to be impressed.",
+      "no": "Order's off. Sort by score desc, then name.",
+      "type": "Submit a list of hostnames."
+    },
+    "m16": {
+      "ok": "Index 61803 — found with a handful of probes.",
+      "no": "Got {got}. That's not the index of the target.",
+      "type": "Submit an integer index."
+    },
+    "m17": {
+      "ok": "Whole network mapped: {n} hosts.",
+      "no": "Map incomplete: {missing} missing, {extra} wrong.",
+      "type": "Submit a list of hostnames."
+    },
+    "m18": {
+      "ok": "Path to the vault: {hops} hops.",
+      "type": "Submit a non-empty list of hostnames (the path).",
+      "ends": "The path must start at home and end at vault.",
+      "broken": "No link between {a} and {b} — the path is broken."
+    },
+    "m19": {
+      "ok": "Cheapest route costs {cost}. Routing nailed.",
+      "no": "Got {got}. That isn't the minimum total latency.",
+      "type": "Submit the total latency (an integer)."
+    },
+    "m20": {
+      "ok": "Caesar never saw it coming. Message decrypted.",
+      "no": "Decryption is wrong. Try the crib word."
+    },
+    "m21": {
+      "ok": "Vigenere broken. Dock seven, midnight — noted.",
+      "no": "Not decrypted. Use the key with the right offset per letter."
+    },
+    "m22": {
+      "ok": "XOR undone. The access code is yours.",
+      "no": "Still scrambled. Decode base64, then XOR with the key."
+    },
+    "m23": {
+      "ok": "Password recovered: falcon99. The toy hash was a toy.",
+      "no": "No match. Hash each word and compare to the target."
+    },
+    "m24": {
+      "ok": "Intruder identified: 203.0.113.7.",
+      "no": "Got '{got}'. Find the IP with the most denials."
+    },
+    "m25": {
+      "ok": "ROOT SHELL UNLOCKED. GG, operator. BYTE is almost proud.",
+      "no": "Payload still encrypted. Route, crack, then decrypt.",
+      "alarm": "Alarm tripped on the mainframe — too many bad PINs."
+    }
+  },
+  "sandbox": {
+    "intro": "Free play: a fresh randomly-generated network every seed. Map it, or crack the gateway and lift the flag.",
+    "flag_ok": "Flag captured. Nice.",
+    "flag_no": "That's not the flag. Crack the gateway and read flag.txt.",
+    "map_ok": "Network mapped: {n} hosts.",
+    "map_no": "Submit a list of hostnames.",
+    "map_partial": "Map incomplete: {missing} missing, {extra} wrong."
+  },
+  "achievement": {
+    "first-blood": {
+      "name": "First Contact",
+      "desc": "Complete your first mission."
+    },
+    "act-1": {
+      "name": "Onboarded",
+      "desc": "Finish Act I."
+    },
+    "act-2": {
+      "name": "Loop Wrangler",
+      "desc": "Finish Act II."
+    },
+    "act-3": {
+      "name": "Wordsmith",
+      "desc": "Finish Act III."
+    },
+    "act-4": {
+      "name": "Algorithmist",
+      "desc": "Finish Act IV."
+    },
+    "cryptographer": {
+      "name": "Cryptographer",
+      "desc": "Finish Act V."
+    },
+    "efficient": {
+      "name": "Tight Code",
+      "desc": "Earn 3 stars on a mission."
+    },
+    "shopper": {
+      "name": "Window Shopper",
+      "desc": "Buy a command from the shop."
+    },
+    "quiet-pro": {
+      "name": "Ghost",
+      "desc": "Crack the Weak PIN gateway in 12 tries or fewer."
+    },
+    "star-hoarder": {
+      "name": "Star Hoarder",
+      "desc": "Collect 50 stars."
+    },
+    "completionist": {
+      "name": "Full Access",
+      "desc": "Complete every campaign mission."
+    }
+  },
+  "shop_items": {
+    "grep": {
+      "name": "grep(pattern, text)",
+      "desc": "Return the lines of text matching a regex."
+    },
+    "freq": {
+      "name": "freq(seq)",
+      "desc": "Count how often each item appears (a dict)."
+    },
+    "nums": {
+      "name": "nums(text)",
+      "desc": "Pull every whole number out of text, in order."
+    },
+    "uniq": {
+      "name": "uniq(seq)",
+      "desc": "Unique items, keeping first-seen order."
+    }
+  },
+  "mission": {
+    "1": {
+      "title": "First Contact",
+      "briefing": "BYTE: \"So you're the new operator. Thrilling. Prove you can type: call submit(\\\"ONLINE\\\") so the roster stops nagging me.\"",
+      "concept": "print() shows text; submit() sends your answer to the mission.\nStrings go in quotes.\nExample:\n    print(\"hello\")\n    submit(\"hello\")",
+      "hints": [
+        "submit() takes exactly what the briefing asks for.",
+        "The word must be ONLINE, in capitals, in quotes.",
+        "The whole script is one line: submit(\"ONLINE\")."
+      ],
+      "template": "# Mission 1: First Contact\n# Report in with the word ONLINE.\n\nprint(cat(\"welcome.txt\"))\n"
+    },
+    "2": {
+      "title": "Payroll Math",
+      "briefing": "BYTE: \"The payroll bot owes you 7 invoices of 13 credits, plus a 5-credit 'bribe' it insists on calling a 'rounding adjustment'. Submit the total.\"",
+      "concept": "Python does arithmetic: + - * / and ** for powers.\nParentheses group things.\nExample:\n    total = 3 * 4 + 2   # 14\n    submit(total)",
+      "hints": [
+        "7 invoices of 13 each is a multiplication.",
+        "Then add the 5-credit bribe.",
+        "submit(7 * 13 + 5)."
+      ],
+      "template": "# Mission 2: Payroll Math\n# Submit the total number of credits.\n\nprint(\"TODO\")\n"
+    },
+    "3": {
+      "title": "Badge Forgery",
+      "briefing": "BYTE: \"Security badges here are 'OMNI-' followed by a 4-digit number, zero-padded. Forge badge number 42. Submit the full badge string.\"",
+      "concept": "Build strings with f-strings. :04d pads a number to 4 digits.\nExample:\n    n = 7\n    submit(f\"ID-{n:04d}\")   # ID-0007",
+      "hints": [
+        "The prefix is OMNI- and the number is 42.",
+        "Zero-pad to 4 digits with :04d inside an f-string.",
+        "submit(f\"OMNI-{42:04d}\")."
+      ],
+      "template": "# Mission 3: Badge Forgery\n# Build the badge OMNI-0042 and submit it.\n\nprint(\"TODO\")\n"
+    },
+    "4": {
+      "title": "Clearance Check",
+      "briefing": "BYTE: \"Access rule: GRANT if rank is at least 5 AND the operator is not flagged. This operator has rank 7 and is not flagged. Submit GRANT or DENY.\"",
+      "concept": "Booleans are True/False. Combine with and / or / not.\nif/else chooses between options.\nExample:\n    ok = age >= 18 and not banned\n    submit(\"YES\" if ok else \"NO\")",
+      "hints": [
+        "rank 7 >= 5 is True; 'not flagged' is also True.",
+        "True and True -> GRANT.",
+        "submit(\"GRANT\" if 7 >= 5 and not False else \"DENY\")."
+      ],
+      "template": "# Mission 4: Clearance Check\n# Decide GRANT or DENY from the rule.\n\nrank = 7\nflagged = False\nprint(\"TODO\")\n"
+    },
+    "5": {
+      "title": "Even Sweep",
+      "briefing": "BYTE: \"The door code is the sum of every even number from 1 to 100. Yes, I could tell you. No, I won't. Submit it.\"",
+      "concept": "for loops over range(a, b) repeat work.\nx % 2 == 0 tests for even.\nExample:\n    total = 0\n    for n in range(1, 11):\n        total += n\n    submit(total)",
+      "hints": [
+        "range(1, 101) covers 1 through 100.",
+        "Add n only when n % 2 == 0.",
+        "Keep a running total and submit it at the end."
+      ],
+      "template": "# Mission 5: Even Sweep\n# Sum the even numbers from 1 to 100.\n\ntotal = 0\nfor n in range(1, 101):\n    pass\nprint(total)\n"
+    },
+    "6": {
+      "title": "Open Ports",
+      "briefing": "BYTE: \"scan.txt lists ports as 'port NUMBER open/closed'. I need a sorted list of the OPEN port numbers. Lists, operator. Learn to love them.\"",
+      "concept": "Split text into lines and words; build a list; sort it.\nExample:\n    out = []\n    for line in text.splitlines():\n        parts = line.split()\n        out.append(int(parts[1]))\n    submit(sorted(out))",
+      "hints": [
+        "cat(\"scan.txt\").splitlines() gives you the rows.",
+        "Each row splits into ['port', NUMBER, STATE].",
+        "Keep the number when the state is 'open', then submit sorted(list)."
+      ],
+      "template": "# Mission 6: Open Ports\n# Submit a sorted list of open port numbers.\n\ndata = cat(\"scan.txt\")\nprint(data)\n"
+    },
+    "7": {
+      "title": "Weak PIN",
+      "briefing": "BYTE: \"Gateway gw-01 holds the operator file. Its PIN hint is almost insulting. Trying all 10000 PINs will trip the alarm and blow the CPU budget — narrow it down first, then crack it, connect and submit operator.txt.\"",
+      "concept": "Nested loops explore combinations. Use the hint to shrink the search.\ncrack(host, pin) returns True when the PIN is right.\nExample:\n    for a in range(10):\n        for b in range(10):\n            try(a, b)",
+      "hints": [
+        "The PIN is a palindrome abba: only 'a' and 'b' vary (100 options).",
+        "Digits sum to 20 and it starts with 7, so a=7 and 7+b+b+7=20 -> b=3.",
+        "Build the few candidates, crack('gw-01', pin), then connect and cat."
+      ],
+      "template": "# Mission 7: Weak PIN\n# Narrow the PIN from the hint, crack gw-01, read operator.txt.\n\nscan()\nconnect(\"relay\")\nscan()\nprint(hint(\"gw-01\"))\n"
+    },
+    "8": {
+      "title": "Busiest User",
+      "briefing": "BYTE: \"events.log has lines like 'user=NAME action=THING'. Tell me which user shows up most. A dictionary is the tool. Try to keep up.\"",
+      "concept": "Dictionaries map keys to values. Great for counting.\nExample:\n    counts = {}\n    for name in names:\n        counts[name] = counts.get(name, 0) + 1\n    busiest = max(counts, key=counts.get)",
+      "hints": [
+        "Pull the NAME out of each line (split on spaces, then on '=').",
+        "Count each name in a dict with counts.get(name, 0) + 1.",
+        "max(counts, key=counts.get) gives the busiest; submit that name."
+      ],
+      "template": "# Mission 8: Busiest User\n# Submit the username with the most log lines.\n\nfor line in cat(\"events.log\").splitlines():\n    print(line)\n"
+    },
+    "9": {
+      "title": "Common Ground",
+      "briefing": "BYTE: \"Two sensors each saw a set of hosts (sensor-a.txt, sensor-b.txt, space-separated). I want the hosts BOTH saw. Sets do this in one move.\"",
+      "concept": "Sets hold unique items. '&' is intersection, '|' union, '-' difference.\nExample:\n    a = set(\"x y z\".split())\n    b = set(\"y z w\".split())\n    both = a & b   # {'y', 'z'}",
+      "hints": [
+        "Turn each file's words into a set.",
+        "The hosts seen by both is the intersection a & b.",
+        "submit(sorted(a & b))."
+      ],
+      "template": "# Mission 9: Common Ground\n# Submit the hosts seen by BOTH sensors.\n\na = cat(\"sensor-a.txt\").split()\nb = cat(\"sensor-b.txt\").split()\nprint(a, b)\n"
+    },
+    "10": {
+      "title": "Checksum",
+      "briefing": "BYTE: \"badges.txt lists 4-digit badges. A badge is valid when its digits sum to a multiple of 7. Write a function that checks one, then count the valid ones. Functions, operator. So you can stop repeating yourself.\"",
+      "concept": "def creates a reusable function.\nExample:\n    def digit_sum(s):\n        return sum(int(c) for c in s)\n    print(digit_sum(\"1234\"))  # 10",
+      "hints": [
+        "Write valid(badge): digits sum % 7 == 0.",
+        "Loop over the badges, call valid() on each.",
+        "Count the True results and submit the count."
+      ],
+      "template": "# Mission 10: Checksum\n# Submit how many badges have a digit-sum divisible by 7.\n\nbadges = cat(\"badges.txt\").splitlines()\nprint(badges)\n"
+    },
+    "11": {
+      "title": "Messy Record",
+      "briefing": "BYTE: \"record.txt is a mess: 'NAME : Ghost ; ROLE: operator ; CLEAR: 9', drowning in spaces. Extract the NAME value. String methods exist. Use them.\"",
+      "concept": "str methods clean text: .split(sep), .strip(), .partition(sep).\nExample:\n    field = \" a : b \"\n    key, _, val = field.partition(\":\")\n    print(val.strip())  # b",
+      "hints": [
+        "Split the record on ';' to get each field.",
+        "The NAME field splits on ':' into key and value.",
+        "Strip the spaces off the value and submit it (it's 'Ghost')."
+      ],
+      "template": "# Mission 11: Messy Record\n# Submit the NAME value from the record.\n\nrecord = cat(\"record.txt\")\nprint(repr(record))\n"
+    },
+    "12": {
+      "title": "Reversed",
+      "briefing": "BYTE: \"cipher0.txt was 'encrypted' by someone who reversed the characters. Adorable. Un-reverse it and submit the plain text. Slicing does it in one step.\"",
+      "concept": "Slicing: s[start:stop:step]. s[::-1] reverses a string.\nExample:\n    s = \"abc\"\n    print(s[::-1])  # cba",
+      "hints": [
+        "Read cipher0.txt.",
+        "Reverse it with [::-1].",
+        "submit(cat(\"cipher0.txt\")[::-1])."
+      ],
+      "template": "# Mission 12: Reversed\n# Un-reverse cipher0.txt and submit the plain text.\n\nprint(cat(\"cipher0.txt\"))\n"
+    },
+    "13": {
+      "title": "Vault Depth",
+      "briefing": "BYTE: \"The vault depth is the 20th Fibonacci number (F(1)=1, F(2)=1). Compute it. Warning: the naive recursive version will burn your whole CPU budget. Remember what you compute.\"",
+      "concept": "Recursion: a function that calls itself, with a base case.\nMemoizing (caching) avoids recomputing the same value.\nExample:\n    cache = {}\n    def fib(n):\n        if n < 3: return 1\n        if n not in cache:\n            cache[n] = fib(n-1) + fib(n-2)\n        return cache[n]",
+      "hints": [
+        "F(1)=1, F(2)=1, F(n)=F(n-1)+F(n-2).",
+        "Plain recursion recomputes the same values thousands of times — cache them.",
+        "Or just loop: keep the last two numbers and step up to 20."
+      ],
+      "template": "# Mission 13: Vault Depth\n# Submit the 20th Fibonacci number (should be 6765).\n\nprint(\"TODO\")\n"
+    },
+    "14": {
+      "title": "Odd Squares",
+      "briefing": "BYTE: \"nums.txt is a row of numbers. Give me the squares of only the ODD ones, sorted. One comprehension should do it. Show off a little.\"",
+      "concept": "List comprehensions build a list in one expression, with a filter.\nExample:\n    evens = [n for n in nums if n % 2 == 0]\n    squares = [n*n for n in nums]",
+      "hints": [
+        "Split nums.txt and turn each piece into an int.",
+        "[n*n for n in nums if n % 2 == 1] keeps odd squares.",
+        "submit(sorted(that list))."
+      ],
+      "template": "# Mission 14: Odd Squares\n# Submit the sorted squares of the odd numbers.\n\nnums = [int(x) for x in cat(\"nums.txt\").split()]\nprint(nums)\n"
+    },
+    "15": {
+      "title": "Target Ranking",
+      "briefing": "BYTE: \"targets.txt pairs each host with a value score. Rank them: highest score first, ties broken by hostname A-Z. Submit the ordered hostnames.\"",
+      "concept": "sorted(..., key=...) sorts by a computed key; reverse or negate to flip.\nExample:\n    rows.sort(key=lambda r: (-r[1], r[0]))",
+      "hints": [
+        "Parse each line into (name, score) with score as an int.",
+        "Sort by key=lambda r: (-score, name) to get score desc then name asc.",
+        "Submit just the names, in that order."
+      ],
+      "template": "# Mission 15: Target Ranking\n# Submit hostnames sorted by score desc, then name asc.\n\nfor line in cat(\"targets.txt\").splitlines():\n    print(line.split())\n"
+    },
+    "16": {
+      "title": "Needle",
+      "briefing": "BYTE: \"A sorted dataset of 100000 records. size() tells you how many, at(i) reads one. Find the INDEX of the target value from index.txt. Reading all of them trips the budget — the data is sorted, so be clever.\"",
+      "concept": "Binary search halves a sorted range each step: O(log n), not O(n).\nExample:\n    lo, hi = 0, size()-1\n    while lo <= hi:\n        mid = (lo+hi)//2\n        v = at(mid)\n        if v == target: ...\n        elif v < target: lo = mid+1\n        else: hi = mid-1",
+      "hints": [
+        "The data is sorted ascending — never scan it start to end.",
+        "Binary search: compare at(mid) to the target, discard half each step.",
+        "When at(mid) == target, submit mid."
+      ],
+      "template": "# Mission 16: Needle\n# Find the index of the target value (binary search).\n\nprint(\"records:\", size())\nprint(cat(\"index.txt\"))\n"
+    },
+    "17": {
+      "title": "Full Map",
+      "briefing": "BYTE: \"Map every host reachable from home and submit the list. scan() only shows direct links, so you must keep scanning what you discover. This is breadth-first search. Act like you knew that.\"",
+      "concept": "BFS explores a graph level by level using a queue.\nExample:\n    seen = {'home'}; queue = ['home']\n    while queue:\n        for n in scan(queue.pop(0)):\n            if n not in seen:\n                seen.add(n); queue.append(n)",
+      "hints": [
+        "Keep a 'seen' set and a queue of hosts to scan.",
+        "For each host you pop, scan it and enqueue any new neighbours.",
+        "When the queue empties, submit the sorted seen set."
+      ],
+      "template": "# Mission 17: Full Map\n# Submit every host reachable from home.\n\nprint(scan())\n"
+    },
+    "18": {
+      "title": "Find the Vault",
+      "briefing": "BYTE: \"Somewhere past here is 'vault'. Give me an actual PATH from home to vault — a list of hosts where each links to the next. DFS and a trail of breadcrumbs will do it.\"",
+      "concept": "DFS follows one branch deep, backtracking when it dead-ends.\nTrack the path you took so you can submit it.\nExample:\n    def dfs(host, path):\n        if host == goal: return path\n        for n in scan(host):\n            if n not in path:\n                r = dfs(n, path+[n])\n                if r: return r",
+      "hints": [
+        "Explore from home, carrying the list of hosts you walked through.",
+        "Don't revisit a host already in your current path.",
+        "Return/submit the first path whose last host is 'vault'."
+      ],
+      "template": "# Mission 18: Find the Vault\n# Submit a path (list) from home to vault.\n\nprint(scan())\n"
+    },
+    "19": {
+      "title": "Cheapest Route",
+      "briefing": "BYTE: \"links() gives (host, latency) pairs now. Routes have a cost. Find the minimum total latency from home to 'core' and submit that number. Dijkstra is the grown-up way.\"",
+      "concept": "Dijkstra finds least-cost paths with a priority queue (heapq).\nExample:\n    import heapq\n    best = {'home': 0}; pq = [(0, 'home')]\n    while pq:\n        c, h = heapq.heappop(pq)\n        for n, w in links(h):\n            if c+w < best.get(n, 1e9):\n                best[n] = c+w; heapq.heappush(pq, (c+w, n))",
+      "hints": [
+        "Track the cheapest known cost to reach each host.",
+        "Always expand the cheapest unsettled host next (a heap helps).",
+        "When 'core' is settled, submit its cost (it's 5)."
+      ],
+      "template": "# Mission 19: Cheapest Route\n# Submit the minimum total latency from home to core.\n\nprint(links())\n"
+    },
+    "20": {
+      "title": "Intercepted",
+      "briefing": "BYTE: \"archive holds msg.enc, shifted by some unknown amount (a Caesar cipher). note.txt says every internal memo starts with OMNIGRID. That's your crib. Decrypt and submit the plain text.\"",
+      "concept": "Caesar shifts each letter by a fixed amount. Undo by shifting back.\nord('A')=65. (ord(c)-65-shift) % 26 + 65 maps it back.\nExample:\n    dec = ''.join(chr((ord(c)-65-s)%26+65) if c.isalpha() else c for c in msg)",
+      "hints": [
+        "Try every shift 0..25.",
+        "The right shift makes the text start with OMNIGRID.",
+        "Submit that decrypted string."
+      ],
+      "template": "# Mission 20: Intercepted\n# Decrypt msg.enc (Caesar) and submit the plain text.\n\nscan()\nconnect(\"archive\")\nprint(ls())\nprint(cat(\"msg.enc\"))\n"
+    },
+    "21": {
+      "title": "Keyword",
+      "briefing": "BYTE: \"msg.vig is a Vigenere cipher. key.txt hands you the key — how generous. Each letter is shifted by the matching key letter, repeating. Decrypt and submit.\"",
+      "concept": "Vigenere: letter i is shifted by key[i % len(key)]. Undo by subtracting.\nOnly count letters when advancing the key index.\nExample:\n    k = ord(key[j%len(key)])-65\n    plain = chr((ord(c)-65-k)%26+65)",
+      "hints": [
+        "Read the key from key.txt.",
+        "Walk the ciphertext; for each letter subtract the key letter's offset.",
+        "Advance the key position only on letters, not spaces."
+      ],
+      "template": "# Mission 21: Keyword\n# Decrypt msg.vig (Vigenere) with the given key.\n\nscan()\nconnect(\"archive\")\nprint(cat(\"key.txt\"))\nprint(cat(\"msg.vig\"))\n"
+    },
+    "22": {
+      "title": "XOR",
+      "briefing": "BYTE: \"msg.b64 is base64 of bytes XORed with a short repeating key (key.txt). Decode the base64, XOR it back, and submit the text. base64 is an allowed import.\"",
+      "concept": "XOR is reversible: a ^ k ^ k == a. base64.b64decode undoes base64.\nExample:\n    import base64\n    raw = base64.b64decode(data)\n    out = bytes(b ^ key[i%len(key)] for i,b in enumerate(raw)).decode()",
+      "hints": [
+        "base64.b64decode(cat('msg.b64')) gives the raw bytes.",
+        "XOR each byte with key[i % len(key)] (key as bytes).",
+        "Decode the result to text and submit it."
+      ],
+      "template": "# Mission 22: XOR\n# Decode base64, XOR with the key, submit the text.\n\nscan()\nconnect(\"relay\")\nprint(cat(\"key.txt\"))\nprint(cat(\"msg.b64\"))\n"
+    },
+    "23": {
+      "title": "Toy Hash",
+      "briefing": "BYTE: \"shadow.txt has admin's password hash. scheme.txt spells out the (laughably weak) hash. wordlist.b64 is a base64 list of candidate passwords. Hash each word, find the match, submit the password.\"",
+      "concept": "Rebuild the hash, then dictionary-attack it.\nExample:\n    def h(s):\n        v = 0\n        for c in s: v = (v*31 + ord(c)) % 100003\n        return v",
+      "hints": [
+        "Decode wordlist.b64 with base64 and split into words.",
+        "Implement the hash from scheme.txt exactly.",
+        "Hash each word; submit the one whose hash equals admin's."
+      ],
+      "template": "# Mission 23: Toy Hash\n# Find the password whose toy-hash matches admin's.\n\nprint(cat(\"shadow.txt\"))\nprint(cat(\"scheme.txt\"))\n"
+    },
+    "24": {
+      "title": "Who Did It",
+      "briefing": "BYTE: \"access.log is 'IP METHOD PATH STATUS'. A 403 is a denied request. Find the IP with the most denials — that's our intruder. Submit the IP.\"",
+      "concept": "Parse fields, tally per key, pick the max. re / freq help if you own them.\nExample:\n    for line in log.splitlines():\n        ip, method, path, status = line.split()",
+      "hints": [
+        "Split each line into ip, method, path, status.",
+        "Count a strike for an IP only when status is 403.",
+        "Submit the IP with the highest count (it's 203.0.113.7)."
+      ],
+      "template": "# Mission 24: Who Did It\n# Submit the IP with the most 403 (denied) requests.\n\nfor line in cat(\"access.log\").splitlines():\n    print(line.split())\n"
+    },
+    "25": {
+      "title": "Mainframe",
+      "briefing": "BYTE: \"Capstone. Reach 'mainframe' (routes cost latency — take the cheap one if you like), crack its PIN from the hint, then decrypt payload.vig with the key beside it. Submit the plaintext. Don't trip the alarm. Make me proud. Or don't; I'm a program.\"",
+      "concept": "Everything you've learned: routing, cracking a narrowed PIN, Vigenere.\nThe PIN is 5 strictly-increasing non-zero digits summing to 17.\nExample PIN candidates come from itertools.combinations(range(1,10), 5).",
+      "hints": [
+        "connect through the network to reach mainframe (links() shows costs).",
+        "PIN: pick 5 increasing digits 1-9 that sum to 17; itertools.combinations helps — crack each.",
+        "Once connected, decrypt payload.vig with the Vigenere key and submit it."
+      ],
+      "template": "# Mission 25: Mainframe\n# Route to mainframe, crack the PIN, decrypt payload.vig.\n\nprint(links())\n"
+    }
+  }
+}

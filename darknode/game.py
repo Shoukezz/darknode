@@ -13,16 +13,30 @@ class AccessDenied(Exception):
     """Raised in-game when the player touches something they can't reach."""
 
 
+class AlarmTripped(Exception):
+    """Raised when the player makes too much noise (too many failed cracks)."""
+
+
 class GameSession:
     """State of one mission attempt and the API exposed to the script."""
 
-    def __init__(self, network: Network, start: str = HOME) -> None:
+    def __init__(
+        self,
+        network: Network,
+        start: str = HOME,
+        dataset: list[Any] | None = None,
+        crack_limit: int | None = None,
+    ) -> None:
         self.network = network
         self.current = start
         self.discovered: set[str] = {start}
         self.crack_attempts = 0
+        self.failed_cracks = 0
+        self.crack_limit = crack_limit
+        self.dataset = dataset
         self.submitted: Any = None
         self.has_submitted = False
+        self.alarm = False
 
     # --- helpers -------------------------------------------------------
     def _require_known(self, host: str) -> None:
@@ -41,6 +55,14 @@ class GameSession:
         found = self.network.neighbors(host)
         self.discovered.update(found)
         return found
+
+    def links(self, host: str | None = None) -> list[tuple[str, int]]:
+        """Like scan(), but each entry is ``(host, latency)`` for routing."""
+        host = self.current if host is None else host
+        self._require_known(host)
+        found = self.network.neighbors(host)
+        self.discovered.update(found)
+        return [(n, self.network.weight(host, n)) for n in found]
 
     def connect(self, host: str) -> str:
         """Move to a discovered, unlocked host."""
@@ -62,6 +84,13 @@ class GameSession:
         self.crack_attempts += 1
         if node.password is not None and str(password) == node.password:
             node.cracked = True
+        else:
+            self.failed_cracks += 1
+            if self.crack_limit is not None and self.failed_cracks > self.crack_limit:
+                self.alarm = True
+                raise AlarmTripped(
+                    f"alarm tripped after {self.failed_cracks} failed attempts"
+                )
         return not node.locked
 
     def ls(self) -> list[str]:
@@ -75,27 +104,32 @@ class GameSession:
             raise AccessDenied(f"no such file on {self.current}: {filename}")
         return files[filename]
 
+    # --- data-oracle API (used by the search/sort missions) ------------
+    def size(self) -> int:
+        """Length of the dataset attached to this mission."""
+        if self.dataset is None:
+            raise AccessDenied("no dataset on this host")
+        return len(self.dataset)
+
+    def at(self, index: int) -> Any:
+        """Read one element of the dataset (cheap, so you must search smartly)."""
+        if self.dataset is None:
+            raise AccessDenied("no dataset on this host")
+        return self.dataset[index]
+
     def submit(self, answer: Any) -> None:
         """Send your answer to the mission handler."""
         self.submitted = answer
         self.has_submitted = True
 
-    def api(self) -> dict[str, Callable[..., Any]]:
-        names = ("whoami", "scan", "connect", "hint", "crack", "ls", "cat", "submit")
+    # --- wiring ---------------------------------------------------------
+    def api(self, extra: dict[str, Any] | None = None) -> dict[str, Callable[..., Any]]:
+        names = (
+            "whoami", "scan", "links", "connect", "hint", "crack",
+            "ls", "cat", "size", "at", "submit",
+        )
         functions: dict[str, Any] = {name: getattr(self, name) for name in names}
         functions["AccessDenied"] = AccessDenied
+        if extra:
+            functions.update(extra)
         return functions
-
-
-API_HELP = """\
-Commands available inside your scripts:
-  whoami()              -> current host
-  scan(host=None)       -> list of linked hosts (default: current host)
-  connect(host)         -> move to an unlocked host you have discovered
-  hint(host)            -> password hint of a locked host
-  crack(host, password) -> True if the password is right (unlocks the host)
-  ls()                  -> files on the current host
-  cat(filename)         -> contents of a file on the current host
-  submit(answer)        -> send your answer for the mission
-Allowed imports: math, string, itertools, collections, functools, heapq, base64
-"""

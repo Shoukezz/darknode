@@ -25,11 +25,14 @@ jobs:
 
       - name: Assemble site
         run: |
-          mkdir -p site/darknode
+          mkdir -p site/darknode/locales
           cp web/* site/
           cp darknode/*.py site/darknode/
+          cp darknode/locales/*.json site/darknode/locales/
           touch site/.nojekyll
 
+      # enablement:true self-heals once the repo owner has set
+      # Settings -> Pages -> Source: "GitHub Actions" (first run needs that once).
       - uses: actions/configure-pages@v5
         with:
           enablement: true

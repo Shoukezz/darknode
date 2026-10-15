@@ -2,8 +2,8 @@
 
 Rules:
 * only a small set of builtins and an allow-list of modules are available;
-* every executed line costs one CPU "cycle" and the budget is limited,
-  so slow brute force can run out of cycles.
+* every executed line of the player's own script costs one CPU "cycle" and the
+  budget is limited, so slow brute force runs out of cycles.
 
 This is a game mechanic, not a security boundary: only run scripts you trust.
 """
@@ -15,15 +15,18 @@ import sys
 from dataclasses import dataclass, field
 from typing import Any, Callable
 
-ALLOWED_MODULES = frozenset(
-    {"math", "string", "itertools", "collections", "functools", "heapq", "base64"}
-)
+ALLOWED_MODULES = frozenset({
+    "math", "string", "itertools", "collections", "functools",
+    "heapq", "base64", "re", "bisect", "textwrap", "json", "hashlib",
+})
 
 _SAFE_BUILTIN_NAMES = (
-    "abs all any bool chr dict divmod enumerate filter float frozenset hash int "
-    "isinstance len list map max min next ord pow print range repr reversed round "
-    "set sorted str sum tuple zip bytes bytearray "
-    "Exception ValueError KeyError IndexError TypeError StopIteration"
+    "abs all any ascii bin bool chr dict divmod enumerate filter float format "
+    "frozenset hash hex int isinstance len list map max min next oct ord pow "
+    "print range repr reversed round set slice sorted str sum tuple zip bytes "
+    "bytearray complex "
+    "Exception ValueError KeyError IndexError TypeError StopIteration "
+    "ZeroDivisionError ArithmeticError RuntimeError OverflowError True False None"
 ).split()
 
 
@@ -37,6 +40,7 @@ class RunResult:
     cycles: int
     output: list[str] = field(default_factory=list)
     error: str | None = None
+    error_type: str | None = None
 
 
 def _restricted_import(name, globals=None, locals=None, fromlist=(), level=0):
@@ -58,7 +62,10 @@ def run_script(
     def game_print(*args: Any, sep: str = " ", end: str = "\n") -> None:
         output.append(sep.join(str(a) for a in args) + ("" if end == "\n" else end))
 
-    safe_builtins = {name: getattr(builtins, name) for name in _SAFE_BUILTIN_NAMES}
+    safe_builtins: dict[str, Any] = {}
+    for name in _SAFE_BUILTIN_NAMES:
+        if hasattr(builtins, name):
+            safe_builtins[name] = getattr(builtins, name)
     safe_builtins["print"] = game_print
     safe_builtins["__import__"] = _restricted_import
     safe_builtins["__build_class__"] = builtins.__build_class__
@@ -69,7 +76,8 @@ def run_script(
     try:
         code = compile(source, filename, "exec")
     except SyntaxError as exc:
-        return RunResult(False, 0, output, f"SyntaxError: {exc.msg} (line {exc.lineno})")
+        return RunResult(False, 0, output, f"SyntaxError: {exc.msg} (line {exc.lineno})",
+                         "SyntaxError")
 
     cycles = 0
 
@@ -90,9 +98,10 @@ def run_script(
     try:
         exec(code, env)
     except CycleLimitExceeded as exc:
-        return RunResult(False, cycles, output, str(exc))
+        return RunResult(False, cycles, output, str(exc), "CycleLimitExceeded")
     except Exception as exc:  # the player's bug, reported in-game
-        return RunResult(False, cycles, output, f"{type(exc).__name__}: {exc}")
+        return RunResult(False, cycles, output, f"{type(exc).__name__}: {exc}",
+                         type(exc).__name__)
     finally:
         sys.settrace(old_trace)
     return RunResult(True, cycles, output)
